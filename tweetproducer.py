@@ -6,6 +6,8 @@ import json
 import boto3
 import tweepy
 
+import base64
+
 # import logging
 
 consumer_key = os.getenv("consumer_key")
@@ -31,8 +33,8 @@ class KinesisStreamProducer(tweepy.StreamListener):
 
         def on_data(self, data):
                 tweet = json.loads(data)
-                # item = {'DATA':tweet["text"]}
-                self.kinesis_client.put_record(StreamName='KinesisDemo', Data=tweet["text"], PartitionKey="key")
+                tweets_data = json.dumps(tweet)
+                self.kinesis_client.put_record(StreamName='KinesisDemo', Data=tweets_data, PartitionKey="key")
                 print("Publishing record to the stream: ", tweet)
                 # logging.info(tweet)
                 return True
