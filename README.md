@@ -13,3 +13,8 @@ Dependencies:
 pip install boto3
 
 pip install tweepy
+
+Execute bash profile to get the env variables
+------------------------------------------------
+. ~/.bash_profile
+
