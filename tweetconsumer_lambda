@@ -8,31 +8,15 @@ access_key = os.environ['access_key']
 secret_key = os.environ['secret_key']
 
 def lambda_handler(event, context):
-    object_key = str(uuid.uuid4()) 
-    # kinesis_client = boto3.client("kinesis", region_name='us-east-1', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
     s3_client = boto3.client("s3", region_name='us-east-1', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
-    # decoded_record_data = json.loads([base64.b64decode(record['kinesis']['data']) for record in event['Records']])
-    # record = event["Records"][0]
-    # data = record["kinesis"]["data"]
-    # decoded_record_data = json.loads(base64.b64decode(record["kinesis"]["data"]))
-    # test_data = base64.b64decode('ewogICJrZXkxIjogInNoaXdhbmFuZCIsCiAgImtleTIiOiAiTmlzaGFudCIsCiAgImtleTMiOiAidmFsdWUzIgp9Cg==')
     decoded_record_data = [base64.b64decode(record['kinesis']['data']) for record in event['Records']]
     deserialized_data = [json.loads(decoded_record) for decoded_record in decoded_record_data]
 
-        for item in deserialized_data:
-            data = item['DATA']
-			#Id = item['id_str']
-            #Item = {
-			#	'Data': data
-			#	'Id': Id
-			#}
-			response = s3_client.put_object(
-             Bucket='tweepydata',
-             Key=Id,
-             Body=data # 'Feel good' #decoded_record_data
-            )
-
+    for item in deserialized_data:
+        object_key = str(uuid.uuid4())
+        tweet = json.dumps(item)
+        s3_client.put_object(Bucket='tweepydatastream', Key=object_key, Body=bytes(tweet, 'utf-8'))
     
-    # TODO implement
-    # return test_data
+    response = {'status':200}
+    return response
     
