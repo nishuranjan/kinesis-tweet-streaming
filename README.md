@@ -16,5 +16,5 @@ pip install tweepy
 
 Execute bash profile to get the env variables
 ------------------------------------------------
-. ~/.bash_profile
+.    ~/.bash_profile
 
