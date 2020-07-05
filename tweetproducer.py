@@ -8,8 +8,6 @@ import tweepy
 
 import base64
 
-# import logging
-
 consumer_key = os.getenv("consumer_key")
 consumer_secret = os.getenv("consumer_secret")
 
@@ -19,12 +17,10 @@ access_token_secret = os.getenv("access_token_secret")
 access_key = os.getenv("access_key")
 secret_key = os.getenv("secret_key")
 
-# logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
-kinesis_client = boto3.client('kinesis', region_name='us-east-1', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+kinesis_client = boto3.client('kinesis', region_name='us-east-1', aws_access_key_id=xxxxxxxxx, aws_secret_access_key=xxxxxxxx)
 
 class KinesisStreamProducer(tweepy.StreamListener):
 
@@ -36,7 +32,6 @@ class KinesisStreamProducer(tweepy.StreamListener):
                 tweets_data = json.dumps(tweet)
                 self.kinesis_client.put_record(StreamName='KinesisDemo', Data=tweets_data, PartitionKey="key")
                 print("Publishing record to the stream: ", tweet)
-                # logging.info(tweet)
                 return True
 
         def on_error(self, status):
