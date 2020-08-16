@@ -9,7 +9,7 @@ from pyspark.streaming import StreamingContext
 from pyspark.streaming.kinesis import KinesisUtils, InitialPositionInStream
 
 if __name__ == "__main__":
-    applicationName = "PythonStreamingKinesisWordCountAsl"
+    applicationName = "PythonStreamingKinesis"
     streamName= "KinesisDemo"
     endpointUrl="https://kinesis.us-east-1.amazonaws.com"
     regionName="us-east-1"
@@ -21,9 +21,9 @@ if __name__ == "__main__":
 
     def filter_tweets(x):
         json_tweet = json.loads(x)
-		if json_tweet.has_key('lang'):
-        	if json_tweet['lang'] == 'ar':
-            	return True
+	if json_tweet.has_key('lang'):
+            if json_tweet['lang'] == 'ar':
+                return True
     	return False
 
     lines.foreachRDD(lambda rdd: rdd.filter(filter_tweets).coalesce(1).saveAsTextFile("./tweets/%f" % time.time()) )
